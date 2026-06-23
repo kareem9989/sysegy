@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EgyGulf Foods ERP</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon"><i class="fas fa-wheat-awn"></i></div>
+            <div class="logo-text">
+                <span class="logo-main">EgyGulf</span>
+                <span class="logo-sub">Foods ERP</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="nav-item active" data-tab="dashboard"><i class="fas fa-chart-pie"></i><span>لوحة التحكم</span></a>
+            <a class="nav-item" data-tab="products"><i class="fas fa-box-open"></i><span>المنتجات</span></a>
+            <a class="nav-item" data-tab="customers"><i class="fas fa-building"></i><span>العملاء</span></a>
+            <a class="nav-item" data-tab="sales"><i class="fas fa-handshake"></i><span>فريق المبيعات</span></a>
+            <a class="nav-item" data-tab="social"><i class="fas fa-bullhorn"></i><span>فريق السوشيال</span></a>
+            <a class="nav-item" data-tab="invoices"><i class="fas fa-file-invoice-dollar"></i><span>الفواتير</span></a>
+            <a class="nav-item" data-tab="shipping"><i class="fas fa-truck"></i><span>مواعيد التحميل</span></a>
+            <a class="nav-item" data-tab="reports"><i class="fas fa-chart-bar"></i><span>التقارير</span></a>
+            <a class="nav-item" data-tab="todos"><i class="fas fa-list-check"></i><span>مهامي اليومية</span></a>
+            <a class="nav-item" data-tab="packing"><i class="fas fa-boxes"></i><span>Packing List</span></a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-settings" onclick="openSettings()">
+      <i class="fas fa-gear"></i><span>الإعدادات</span>
+    </button>
+        </div>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+
+        <header class="topbar">
+            <button class="topbar-toggle" id="sidebarToggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="topbar-title" id="topbarTitle">لوحة التحكم</div>
+            <div class="topbar-actions">
+                <div class="topbar-date" id="topbarDate"></div>
+                <button class="topbar-theme-btn" onclick="toggleTheme()" title="تغيير المظهر">
+                    <i class="fas fa-sun icon-sun"></i>
+                    <i class="fas fa-moon icon-moon"></i>
+                </button>
+                <button class="topbar-notif-btn" id="notifBell" onclick="toggleNotifPanel()" title="فواتير بدون شهادة صحية">
+        <i class="fas fa-bell"></i>
+        <span class="notif-badge" id="notifBadge" style="display:none">0</span>
+      </button>
+            </div>
+        </header>
+        <!-- NOTIFICATION PANEL -->
+        <div class="notif-panel" id="notifPanel" style="display:none">
+            <div class="notif-panel-header">
+                <span><i class="fas fa-triangle-exclamation" style="color:#f39c12;margin-left:6px"></i>فواتير بدون شهادة صحية</span>
+                <button onclick="toggleNotifPanel()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div id="notifList">
+                <div style="padding:20px;text-align:center;color:var(--text-muted)">جاري التحميل...</div>
+            </div>
+        </div>
+
+        <!-- TAB 1: DASHBOARD -->
+        <section class="tab-content active" id="tab-dashboard">
+            <div class="page-header">
+                <h1>لوحة التحكم</h1>
+                <button class="btn btn-primary" onclick="loadDashboard()"><i class="fas fa-rotate-right"></i> تحديث</button>
+            </div>
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card loading-card">
+                    <div class="skeleton"></div>
+                </div>
+                <div class="stat-card loading-card">
+                    <div class="skeleton"></div>
+                </div>
+                <div class="stat-card loading-card">
+                    <div class="skeleton"></div>
+                </div>
+                <div class="stat-card loading-card">
+                    <div class="skeleton"></div>
+                </div>
+                <div class="stat-card loading-card">
+                    <div class="skeleton"></div>
+                </div>
+                <div class="stat-card loading-card">
+                    <div class="skeleton"></div>
+                </div>
+            </div>
+            <div class="dashboard-row">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-trophy"></i> أفضل عميل</h3>
+                    </div>
+                    <div class="card-body" id="topCustomerCard">
+                        <div class="skeleton" style="height:60px"></div>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-star"></i> أفضل منتج</h3>
+                    </div>
+                    <div class="card-body" id="topProductCard">
+                        <div class="skeleton" style="height:60px"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="dashboard-card full-width">
+                <div class="card-header">
+                    <h3><i class="fas fa-clock-rotate-left"></i> آخر الفواتير</h3>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table" id="recentInvoicesTable">
+                        <thead>
+                            <tr>
+                                <th>رقم الفاتورة</th>
+                                <th>التاريخ</th>
+                                <th>العميل</th>
+                                <th>الإجمالي</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentInvoicesBody">
+                            <tr>
+                                <td colspan="5" class="loading-row">
+                                    <div class="skeleton"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Analytics Section — يتحمّل تلقائياً -->
+            <div id="analyticsSection" style="margin-top:8px">
+                <div style="text-align:center;padding:32px;color:var(--text-muted)"><i class="fas fa-chart-bar fa-2x"></i></div>
+            </div>
+        </section>
+        <section class="tab-content" id="tab-products">
+            <div class="page-header">
+                <h1>إدارة المنتجات</h1>
+                <button class="btn btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> منتج جديد</button>
+            </div>
+            <div class="toolbar">
+                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="productSearch" placeholder="بحث عن منتج..." oninput="filterProducts()" /></div>
+                <select class="filter-select" id="productCategoryFilter" onchange="filterProducts()"><option value="">كل التصنيفات</option></select>
+                <select class="filter-select" id="productStatusFilter" onchange="filterProducts()">
+        <option value="">كل الحالات</option><option value="Active">نشط</option><option value="Inactive">غير نشط</option>
+      </select>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>اسم المنتج</th>
+                            <th>التصنيف</th>
+                            <th>الحجم</th>
+                            <th>وحدات/كرتون</th>
+                            <th>وزن الكرتون</th>
+                            <th>السعر/كرتون</th>
+                            <th>SKU</th>
+                            <th>الحالة</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody"></tbody>
+                </table>
+            </div>
+            <div class="empty-state" id="productsEmpty" style="display:none">
+                <i class="fas fa-box-open"></i>
+                <p>لا توجد منتجات بعد</p>
+                <button class="btn btn-primary" onclick="openProductModal()">أضف أول منتج</button>
+            </div>
+        </section>
+
+        <!-- TAB 3: CUSTOMERS -->
+        <section class="tab-content" id="tab-customers">
+            <div class="page-header">
+                <h1>إدارة العملاء</h1>
+                <button class="btn btn-primary" onclick="openCustomerModal()"><i class="fas fa-plus"></i> عميل جديد</button>
+            </div>
+            <div class="toolbar">
+                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="customerSearch" placeholder="بحث عن عميل..." oninput="filterCustomers()" /></div>
+                <select class="filter-select" id="customerCountryFilter" onchange="filterCustomers()"><option value="">كل الدول</option></select>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>الشركة</th>
+                            <th>جهة التواصل</th>
+                            <th>الدولة</th>
+                            <th>الهاتف</th>
+                            <th>إجمالي الفواتير</th>
+                            <th>إجمالي الإيرادات</th>
+                            <th>آخر فاتورة</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersTableBody"></tbody>
+                </table>
+            </div>
+            <div class="empty-state" id="customersEmpty" style="display:none">
+                <i class="fas fa-building"></i>
+                <p>لا يوجد عملاء بعد</p>
+                <button class="btn btn-primary" onclick="openCustomerModal()">أضف أول عميل</button>
+            </div>
+        </section>
+
+        <!-- TAB 4: SALES TEAM -->
+        <section class="tab-content" id="tab-sales">
+            <div class="page-header">
+                <h1>فريق المبيعات</h1>
+                <button class="btn btn-primary" onclick="openSalesModal()"><i class="fas fa-plus"></i> موظف جديد</button>
+            </div>
+            <div class="cards-grid" id="salesTeamGrid"></div>
+            <div class="empty-state" id="salesEmpty" style="display:none">
+                <i class="fas fa-handshake"></i>
+                <p>لا يوجد موظفو مبيعات بعد</p>
+                <button class="btn btn-primary" onclick="openSalesModal()">أضف موظفاً</button>
+            </div>
+        </section>
+
+        <!-- TAB 5: SOCIAL TEAM -->
+        <section class="tab-content" id="tab-social">
+            <div class="page-header">
+                <h1>فريق السوشيال ميديا</h1>
+                <button class="btn btn-primary" onclick="openSocialModal()"><i class="fas fa-plus"></i> موظف جديد</button>
+            </div>
+            <div class="cards-grid" id="socialTeamGrid"></div>
+            <div class="empty-state" id="socialEmpty" style="display:none">
+                <i class="fas fa-bullhorn"></i>
+                <p>لا يوجد موظفو سوشيال بعد</p>
+                <button class="btn btn-primary" onclick="openSocialModal()">أضف موظفاً</button>
+            </div>
+        </section>
+
+        <!-- TAB 6: INVOICES -->
+        <section class="tab-content" id="tab-invoices">
+            <div class="page-header">
+                <h1>الفواتير</h1>
+                <button class="btn btn-primary" onclick="openInvoiceCreator()"><i class="fas fa-plus"></i> فاتورة جديدة</button>
+            </div>
+            <div class="toolbar">
+                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="invoiceSearch" placeholder="بحث برقم الفاتورة أو العميل..." oninput="filterInvoices()" /></div>
+                <select class="filter-select" id="invoiceStatusFilter" onchange="filterInvoices()">
+        <option value="">كل الحالات</option><option value="Draft">مسودة</option><option value="Confirmed">مؤكدة</option><option value="Paid">مدفوعة</option>
+      </select>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>رقم الفاتورة</th>
+                            <th>التاريخ</th>
+                            <th>العميل</th>
+                            <th>مندوب المبيعات</th>
+                            <th>الإجمالي</th>
+                            <th>عمولة مبيعات</th>
+                            <th>عمولة سوشيال</th>
+                            <th>الحالة</th>
+                            <th>الشهادة الصحية</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoicesTableBody"></tbody>
+                </table>
+            </div>
+            <div class="empty-state" id="invoicesEmpty" style="display:none">
+                <i class="fas fa-file-invoice"></i>
+                <p>لا توجد فواتير بعد</p>
+                <button class="btn btn-primary" onclick="openInvoiceCreator()">أنشئ فاتورة</button>
+            </div>
+        </section>
+
+        <!-- TAB: SHIPPING DATES -->
+        <section class="tab-content" id="tab-shipping">
+            <div class="page-header">
+                <h1>مواعيد التحميل</h1>
+            </div>
+            <div class="toolbar">
+                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="shippingSearch" placeholder="بحث برقم الفاتورة أو العميل..." oninput="filterShippingDates()" /></div>
+                <select class="filter-select" id="shippingDateFilter" onchange="filterShippingDates()">
+                    <option value="">كل الفواتير</option>
+                    <option value="set">عندها ميعاد تحميل</option>
+                    <option value="unset">من غير ميعاد</option>
+                </select>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>رقم الفاتورة</th>
+                            <th>التاريخ</th>
+                            <th>العميل</th>
+                            <th>الإجمالي</th>
+                            <th>ميعاد التحميل</th>
+                            <th>الوقت المتبقي</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shippingTableBody"></tbody>
+                </table>
+            </div>
+            <div class="empty-state" id="shippingEmpty" style="display:none">
+                <i class="fas fa-truck"></i>
+                <p>لا توجد فواتير بعد</p>
+            </div>
+        </section>
+
+        <!-- TAB 7: REPORTS -->
+        <section class="tab-content" id="tab-reports">
+            <div class="page-header">
+                <h1>التقارير</h1>
+            </div>
+            <div class="report-filters">
+                <div class="period-tabs">
+                    <button class="period-btn active" data-period="month" onclick="setPeriod('month',this)">هذا الشهر</button>
+                    <button class="period-btn" data-period="week" onclick="setPeriod('week',this)">هذا الأسبوع</button>
+                    <button class="period-btn" data-period="today" onclick="setPeriod('today',this)">اليوم</button>
+                    <button class="period-btn" data-period="custom" onclick="setPeriod('custom',this)">مخصص</button>
+                </div>
+                <div class="custom-date-range" id="customDateRange" style="display:none">
+                    <input type="date" id="reportFrom" /><span>إلى</span><input type="date" id="reportTo" />
+                    <button class="btn btn-sm btn-primary" onclick="loadReports()">تطبيق</button>
+                </div>
+            </div>
+            <div class="report-tabs">
+                <button class="report-tab-btn active" onclick="switchReport('revenue',this)">الإيرادات</button>
+                <button class="report-tab-btn" onclick="switchReport('customers',this)">العملاء</button>
+                <button class="report-tab-btn" onclick="switchReport('products',this)">المنتجات</button>
+                <button class="report-tab-btn" onclick="switchReport('salesteam',this)">فريق المبيعات</button>
+                <button class="report-tab-btn" onclick="switchReport('socialteam',this)">فريق السوشيال</button>
+                <button class="report-tab-btn" onclick="switchReport('commissions',this)">العمولات</button>
+            </div>
+            <div class="report-section active" id="report-revenue">
+                <div class="stats-grid mini" id="revenueStats"></div>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>رقم الفاتورة</th>
+                                <th>التاريخ</th>
+                                <th>العميل</th>
+                                <th>الإجمالي</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="revenueTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="report-section" id="report-customers">
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>العميل</th>
+                                <th>عدد الفواتير</th>
+                                <th>إجمالي الإيرادات</th>
+                                <th>آخر فاتورة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerReportBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="report-section" id="report-products">
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>المنتج</th>
+                                <th>الكمية المباعة</th>
+                                <th>عدد الكراتين</th>
+                                <th>إجمالي الإيرادات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productReportBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="report-section" id="report-salesteam">
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>الموظف</th>
+                                <th>عدد الفواتير</th>
+                                <th>إجمالي المبيعات</th>
+                                <th>إجمالي العمولة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesReportBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="report-section" id="report-socialteam">
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>الموظف</th>
+                                <th>عملاء محتملين</th>
+                                <th>صفقات مغلقة</th>
+                                <th>إجمالي العمولة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="socialReportBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="report-section" id="report-commissions">
+                <div class="stats-grid mini" id="commissionStats"></div>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>النوع</th>
+                                <th>الموظف</th>
+                                <th>رقم الفاتورة</th>
+                                <th>التاريخ</th>
+                                <th>النسبة</th>
+                                <th>العمولة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="commissionReportBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB: TODOS -->
+        <section class="tab-content" id="tab-todos">
+            <div class="page-header">
+                <h1>مهامي اليومية</h1>
+                <button class="btn btn-primary" onclick="todoOpenAdd()"><i class="fas fa-plus"></i> مهمة جديدة</button>
+            </div>
+
+            <div id="todoAddForm" style="display:none;margin-bottom:16px">
+                <div class="modal-card" style="padding:16px;display:flex;gap:8px;align-items:center">
+                    <input type="text" id="todoInput" class="form-input" placeholder="اكتب المهمة..." maxlength="80" onkeydown="if(event.key==='Enter')todoConfirmAdd(); if(event.key==='Escape')todoCancelAdd();" style="flex:1" />
+                    <button class="btn btn-primary btn-sm" onclick="todoConfirmAdd()"><i class="fas fa-check"></i> إضافة</button>
+                    <button class="btn btn-sm" onclick="todoCancelAdd()"><i class="fas fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40px"></th>
+                            <th>المهمة</th>
+                            <th style="width:120px">الحالة</th>
+                            <th style="width:60px"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="todoTableBody">
+                        <tr>
+                            <td colspan="4" style="text-align:center;padding:32px;color:var(--text-muted)">جارٍ التحميل...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="todoFooter" style="display:none;margin-top:12px;justify-content:space-between;align-items:center">
+                <span id="todoDoneCount" style="color:var(--text-secondary)"></span>
+                <button class="btn btn-sm btn-danger" onclick="todoClearDone()"><i class="fas fa-trash"></i> مسح المنتهية</button>
+            </div>
+        </section>
+
+
+        <!-- PACKING LIST -->
+        <section class="tab-content" id="tab-packing">
+            <div class="page-header">
+                <h2 class="page-title"><i class="fas fa-boxes" style="margin-left:8px"></i>Packing List</h2>
+            </div>
+            <div style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+                <div style="flex:1;min-width:200px">
+                    <label class="form-label">العميل / Customer</label>
+                    <input class="form-input" id="plCustomer" placeholder="اسم العميل">
+                </div>
+                <div style="flex:1;min-width:200px">
+                    <label class="form-label">التاريخ / Date</label>
+                    <input class="form-input" id="plDate" type="date">
+                </div>
+                <div style="flex:1;min-width:200px">
+                    <label class="form-label">رقم الـ PO</label>
+                    <input class="form-input" id="plPO" placeholder="PO Number">
+                </div>
+            </div>
+            <div class="table-wrapper" style="margin-bottom:16px">
+                <table class="data-table" id="plTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Item</th>
+                            <th>Net Weight / Carton (kg)</th>
+                            <th>Gross Weight / Carton (kg)</th>
+                            <th>Units / Carton</th>
+                            <th>No. of Cartons</th>
+                            <th>Total Net (kg)</th>
+                            <th>Total Gross (kg)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="plBody"></tbody>
+                    <tfoot>
+                        <tr style="font-weight:700;background:var(--bg-hover)">
+                            <td colspan="5" style="text-align:right">Total</td>
+                            <td id="plTotalCartons">—</td>
+                            <td id="plTotalNet">—</td>
+                            <td id="plTotalGross">—</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <button class="btn btn-primary" onclick="plAddRow()"><i class="fas fa-plus"></i> إضافة صنف</button>
+                <button class="btn" style="background:var(--bg-hover);color:var(--text-primary)" onclick="plClear()"><i class="fas fa-trash"></i> مسح الكل</button>
+                <button class="btn" style="background:#27ae60;color:#fff" onclick="plPrint()"><i class="fas fa-print"></i> طباعة</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL: PRODUCT -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="productModalTitle">إضافة منتج جديد</h2>
+                <button class="modal-close" onclick="closeModal('productModal')"><i class="fas fa-xmark"></i></button>
+            </div>
+            <form class="modal-form" id="productForm" onsubmit="saveProduct(event)">
+                <input type="hidden" id="productId" />
+                <div class="form-grid">
+                    <div class="form-group"><label>اسم المنتج *</label><input type="text" id="pName" required placeholder="مثال: شيبس بالملح" /></div>
+                    <div class="form-group"><label>التصنيف *</label><input type="text" id="pCategory" required placeholder="مثال: سناكس" list="categoryList" /><datalist id="categoryList"></datalist></div>
+                    <div class="form-group"><label>الحجم / الوزن</label><input type="text" id="pSize" placeholder="مثال: 50-60 gm" /></div>
+                    <div class="form-group"><label>وحدات في الكرتون</label><input type="number" id="pUnits" min="0" placeholder="15" /></div>
+                    <div class="form-group"><label>وزن الكرتون (كجم)</label><input type="number" id="pWeight" min="0" step="0.01" placeholder="6.5" /></div>
+                    <div class="form-group"><label>أبعاد الكرتون</label><input type="text" id="pDimensions" placeholder="40×30×25 cm" /></div>
+                    <div class="form-group"><label>سعر الكرتون *</label><input type="number" id="pPrice" min="0" step="0.01" required placeholder="0.00" /></div>
+                    <div class="form-group"><label>رمز المنتج (SKU)</label><input type="text" id="pSKU" placeholder="EGF-001" /></div>
+                    <div class="form-group"><label>الحالة</label><select id="pStatus"><option value="Active">نشط</option><option value="Inactive">غير نشط</option></select></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal('productModal')">إلغاء</button>
+                    <button type="submit" class="btn btn-primary" id="productSaveBtn"><i class="fas fa-save"></i> حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: CUSTOMER -->
+    <div class="modal-overlay" id="customerModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="customerModalTitle">إضافة عميل جديد</h2>
+                <button class="modal-close" onclick="closeModal('customerModal')"><i class="fas fa-xmark"></i></button>
+            </div>
+            <form class="modal-form" id="customerForm" onsubmit="saveCustomer(event)">
+                <input type="hidden" id="customerId" />
+                <div class="form-grid">
+                    <div class="form-group"><label>اسم الشركة *</label><input type="text" id="cCompany" required placeholder="Gulf Trading Co." /></div>
+                    <div class="form-group"><label>جهة التواصل *</label><input type="text" id="cContact" required placeholder="محمد الأحمدي" /></div>
+                    <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="cEmail" placeholder="email@company.com" /></div>
+                    <div class="form-group"><label>رقم الهاتف</label><input type="text" id="cPhone" placeholder="+971 xx xxx xxxx" /></div>
+                    <div class="form-group"><label>الموقع الإلكتروني</label><input type="text" id="cWebsite" placeholder="www.company.com" /></div>
+                    <div class="form-group"><label>الدولة *</label>
+                        <input type="text" id="cCountry" required placeholder="اختر من القائمة أو اكتب دولة..." list="countriesList" autocomplete="off" />
+                        <datalist id="countriesList">
+                            <option value="الإمارات"></option>
+                            <option value="السعودية"></option>
+                            <option value="الكويت"></option>
+                            <option value="قطر"></option>
+                            <option value="البحرين"></option>
+                            <option value="عُمان"></option>
+                            <option value="الأردن"></option>
+                            <option value="العراق"></option>
+                            <option value="مصر"></option>
+                            <option value="ليبيا"></option>
+                            <option value="تونس"></option>
+                            <option value="المغرب"></option>
+                            <option value="الجزائر"></option>
+                            <option value="السودان"></option>
+                            <option value="اليمن"></option>
+                            <option value="لبنان"></option>
+                            <option value="سوريا"></option>
+                            <option value="فلسطين"></option>
+                            <option value="تركيا"></option>
+                            <option value="إيران"></option>
+                            <option value="باكستان"></option>
+                            <option value="United States"></option>
+                            <option value="United Kingdom"></option>
+                            <option value="Germany"></option>
+                            <option value="France"></option>
+                            <option value="Italy"></option>
+                            <option value="Spain"></option>
+                            <option value="Netherlands"></option>
+                            <option value="China"></option>
+                            <option value="India"></option>
+                            <option value="Canada"></option>
+                            <option value="Australia"></option>
+                        </datalist>
+                    </div>
+                    <div class="form-group"><label>المدينة</label><input type="text" id="cCity" placeholder="دبي" /></div>
+                    <div class="form-group full-span"><label>العنوان التفصيلي</label><input type="text" id="cAddress" placeholder="الشارع، المنطقة، الرمز البريدي" /></div>
+                    <div class="form-group"><label>الرقم الضريبي</label><input type="text" id="cTax" placeholder="100-XXXXXXX" /></div>
+                    <div class="form-group full-span"><label>ملاحظات</label><textarea id="cNotes" rows="2" placeholder="أي ملاحظات إضافية..."></textarea></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal('customerModal')">إلغاء</button>
+                    <button type="submit" class="btn btn-primary" id="customerSaveBtn"><i class="fas fa-save"></i> حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: SALES TEAM -->
+    <div class="modal-overlay" id="salesModal">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h2 id="salesModalTitle">إضافة موظف مبيعات</h2>
+                <button class="modal-close" onclick="closeModal('salesModal')"><i class="fas fa-xmark"></i></button>
+            </div>
+            <form class="modal-form" id="salesForm" onsubmit="saveSalesMember(event)">
+                <input type="hidden" id="salesId" />
+                <div class="form-grid">
+                    <div class="form-group"><label>الاسم *</label><input type="text" id="sName" required placeholder="أحمد محمد" /></div>
+                    <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="sEmail" placeholder="ahmed@egygulf.com" /></div>
+                    <div class="form-group"><label>الهاتف</label><input type="text" id="sPhone" placeholder="+20 xx xxxx xxxx" /></div>
+                    <div class="form-group"><label>نسبة العمولة (%) *</label><input type="number" id="sCommission" min="0" max="100" step="0.5" required placeholder="5" /></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal('salesModal')">إلغاء</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: SOCIAL TEAM -->
+    <div class="modal-overlay" id="socialModal">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h2 id="socialModalTitle">إضافة موظف سوشيال</h2>
+                <button class="modal-close" onclick="closeModal('socialModal')"><i class="fas fa-xmark"></i></button>
+            </div>
+            <form class="modal-form" id="socialForm" onsubmit="saveSocialMember(event)">
+                <input type="hidden" id="socialId" />
+                <div class="form-grid">
+                    <div class="form-group"><label>الاسم *</label><input type="text" id="smName" required placeholder="سارة أحمد" /></div>
+                    <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="smEmail" placeholder="sara@egygulf.com" /></div>
+                    <div class="form-group"><label>الهاتف</label><input type="text" id="smPhone" placeholder="+20 xx xxxx xxxx" /></div>
+                    <div class="form-group"><label>نسبة العمولة (%) *</label><input type="number" id="smCommission" min="0" max="100" step="0.5" required placeholder="3" /></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal('socialModal')">إلغاء</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: SETTINGS -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h2>الإعدادات</h2>
+                <button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-xmark"></i></button>
+            </div>
+            <form class="modal-form" id="settingsForm" onsubmit="saveSettings(event)">
+                <div class="form-group">
+                    <label>عنوان Google Apps Script API *</label>
+                    <input type="url" id="apiUrl" required placeholder="https://script.google.com/macros/s/..." />
+                    <small class="form-hint">انسخ رابط الـ Web App من Google Apps Script</small>
+                </div>
+                <div class="form-group"><label>اسم الشركة</label><input type="text" id="settCompanyName" placeholder="Egyptian Gulf International" /></div>
+                <div class="form-group"><label>الاسم العربي للشركة</label><input type="text" id="settCompanyNameAr" placeholder="الشركة المصرية الخليجية الدولية" /></div>
+                <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="settEmail" placeholder="export@egygulf-foods.com" /></div>
+                <div class="form-group"><label>الهاتف</label><input type="text" id="settPhone" placeholder="+20 xxx xxx xxxx" /></div>
+                <div class="form-group"><label>الموقع الإلكتروني</label><input type="text" id="settWebsite" placeholder="www.egygulf-foods.com" /></div>
+                <div class="form-group"><label>العنوان</label><input type="text" id="settAddress" placeholder="Cairo – Alexandria Agricultural Road, Km 90, Tanta, Egypt" /></div>
+                <div class="form-group"><label>ميناء الشحن الافتراضي</label><input type="text" id="settPortLoading" placeholder="Alexandria Port, Egypt" /></div>
+                <div class="form-group"><label>العملة</label>
+                    <select id="settCurrency">
+          <option value="USD">دولار أمريكي (USD)</option>
+          <option value="EUR">يورو (EUR)</option>
+          <option value="SAR">ريال سعودي (SAR)</option>
+          <option value="AED">درهم إماراتي (AED)</option>
+          <option value="EGP">جنيه مصري (EGP)</option>
+        </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal('settingsModal')">إلغاء</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- INVOICE CREATOR -->
+    <div class="modal-overlay fullscreen" id="invoiceCreatorModal">
+        <div class="modal modal-fullscreen">
+            <div class="modal-header">
+                <h2>إنشاء فاتورة جديدة</h2>
+                <button class="modal-close" onclick="closeModal('invoiceCreatorModal')"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div class="invoice-creator-body">
+                <div class="invoice-creator-form">
+                    <div class="form-section">
+                        <h3>بيانات الفاتورة</h3>
+                        <div class="form-grid">
+                            <div class="form-group"><label>رقم الفاتورة</label><input type="text" id="invNumber" placeholder="تلقائي" /></div>
+                            <div class="form-group"><label>التاريخ *</label><input type="date" id="invDate" required /></div>
+                            <div class="form-group"><label>العميل *</label><select id="invCustomer" required onchange="onCustomerChange()"><option value="">اختر العميل</option></select></div>
+                            <div class="form-group"><label>مندوب المبيعات</label><select id="invSalesRep" onchange="recalculate()"><option value="">-- لا يوجد --</option></select></div>
+                            <div class="form-group"><label>عمولة المبيعات %</label><input type="number" id="invSalesRate" min="0" max="100" step="0.5" value="0" oninput="recalculate()" placeholder="0" /></div>
+                            <div class="form-group"><label>مندوب السوشيال</label><select id="invSocialRep" onchange="recalculate()"><option value="">-- لا يوجد --</option></select></div>
+                            <div class="form-group"><label>عمولة السوشيال %</label><input type="number" id="invSocialRate" min="0" max="100" step="0.5" value="0" oninput="recalculate()" placeholder="0" /></div>
+                            <div class="form-group">
+                                <label>الخصم <span id="discountTypeTag" style="font-size:11px;padding:2px 8px;border-radius:4px;background:var(--bg-elevated);color:var(--text-muted);font-weight:600;margin-right:6px">لا خصم</span></label>
+                                <input type="text" id="invDiscount" value="0" oninput="recalculate()" placeholder="مثال: 10% أو 50" />
+                                <small style="color:var(--text-muted);font-size:11px;margin-top:4px;display:block"><i class="fas fa-lightbulb" style="color:var(--accent)"></i> اكتب <strong>10%</strong> لخصم نسبة، أو <strong>50</strong> لخصم مبلغ ثابت</small>
+                            </div>
+                            <div class="form-group"><label>ميناء الشحن (Port of Loading)</label><input type="text" id="invPortLoading" placeholder="Alexandria Port, Egypt" /></div>
+                            <div class="form-group"><label>ميناء الوصول (Port of Discharge)</label><input type="text" id="invPortDischarge" placeholder="مثال: Aqaba Port, Jordan" /></div>
+                            <div class="form-group full-span"><label>ملاحظات</label><textarea id="invNotes" rows="2" placeholder="ملاحظات اختيارية..."></textarea></div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><i class="fas fa-industry" style="color:var(--accent);margin-left:6px"></i>أمر الإنتاج</h3>
+                        <div class="form-grid">
+                            <div class="form-group"><label>رقم التشغيل</label><input type="text" id="invRunNumber" placeholder="مثال: RUN-2024-001" /></div>
+                            <div class="form-group"><label>تاريخ إصدار أمر الإنتاج</label><input type="date" id="invProductionOrderDate" /></div>
+                            <div class="form-group"><label>شهر الإنتاج</label><input type="month" id="invProductionMonth" /></div>
+                            <div class="form-group"><label>صلاحية المنتج</label><input type="text" id="invExpiry" placeholder="مثال: 12 شهراً / 31-12-2025" /></div>
+                            <div class="form-group full-span"><label>ملاحظات الإنتاج</label><textarea id="invProductionNotes" rows="2" placeholder="ملاحظات خاصة بأمر الإنتاج..."></textarea></div>
+                            <div class="form-group full-span"><label>ملاحظات المشتريات</label><textarea id="invPurchasingNotes" rows="2" placeholder="ملاحظات المشتريات..."></textarea></div>
+                            <div class="form-group full-span"><label>ملاحظات التصنيع</label><textarea id="invManufacturingNotes" rows="2" placeholder="ملاحظات التصنيع..."></textarea></div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <div class="section-header-row">
+                            <h3>المنتجات</h3>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="addInvoiceItem()"><i class="fas fa-plus"></i> إضافة منتج</button>
+                        </div>
+                        <div class="invoice-items" id="invoiceItemsList"></div>
+                    </div>
+                </div>
+                <div class="invoice-summary-panel">
+                    <h3>ملخص الفاتورة</h3>
+                    <div class="summary-row"><span>المجموع الفرعي:</span><span id="sumSubtotal">0.00</span></div>
+                    <div class="summary-row"><span>قيمة الخصم:</span><span id="sumDiscountVal">0.00</span></div>
+                    <div class="summary-row"><span>المجموع بعد الخصم:</span><span id="sumAfterDiscount">0.00</span></div>
+                    <div class="summary-divider"></div>
+                    <div class="summary-row commission-row"><span>عمولة المبيعات:</span><span id="sumSalesComm">0.00</span></div>
+                    <div class="summary-row commission-row"><span>عمولة السوشيال:</span><span id="sumSocialComm">0.00</span></div>
+                    <div class="summary-divider"></div>
+                    <div class="summary-row grand-total"><span>الإجمالي النهائي:</span><span id="sumGrandTotal">0.00</span></div>
+                    <div class="invoice-actions">
+                        <button class="btn btn-outline full-btn" onclick="previewInvoice()"><i class="fas fa-eye"></i> معاينة وطباعة</button>
+                        <button class="btn btn-primary full-btn" onclick="saveInvoice('Draft')"><i class="fas fa-save"></i> حفظ مسودة</button>
+                        <button class="btn btn-success full-btn" onclick="saveInvoice('Confirmed')"><i class="fas fa-check-circle"></i> تأكيد وحفظ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INVOICE PREVIEW (Print) -->
+    <div class="modal-overlay" id="invoicePreviewModal">
+        <div class="modal modal-fullscreen">
+            <div class="modal-header no-print">
+                <h2>معاينة الفاتورة التجارية</h2>
+                <div style="display:flex;gap:8px">
+                    <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> طباعة / PDF</button>
+                    <button class="modal-close" onclick="closeModal('invoicePreviewModal')"><i class="fas fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="invoice-print-wrapper" id="invoicePrintContent"></div>
+        </div>
+    </div>
+
+    <!-- CONFIRM MODAL -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal modal-xs">
+            <div class="modal-header">
+                <h2>تأكيد الحذف</h2>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-icon"><i class="fas fa-triangle-exclamation"></i></div>
+                <p id="confirmMessage">هل أنت متأكد من حذف هذا العنصر؟</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('confirmModal')">إلغاء</button>
+                <button class="btn btn-danger" id="confirmBtn"><i class="fas fa-trash"></i> حذف</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="api-banner" id="apiBanner" style="display:none">
+        <i class="fas fa-triangle-exclamation"></i> لم يتم ضبط رابط الـ API بعد.
+        <button onclick="openSettings()">اضبط الآن</button>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="supabase-adapter.js"></script>
+    <!-- Flavor Modal -->
+    <div class="modal-overlay" id="flavorModal">
+        <div class="modal" style="max-width:600px;width:95%">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-pepper-hot" style="color:#e74c3c"></i> إدارة النكهات</h2>
+                <button class="modal-close" onclick="closeModal('flavorModal')"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="flavorModalBody"></div>
+        </div>
+    </div>
+
+    <script src="https://replit-cdn.com/replit-pill/replit-pill.global.js" data-repl-id="e37a9db1-4036-4548-91bd-c534ca77ac3f"></script>
+</body>
+
+</html>
