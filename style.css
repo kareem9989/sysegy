@@ -3,75 +3,77 @@
    ============================================================ */
 
 :root,
-[data-theme="dark"] {
-    --bg-base: #0a1512;
-    --bg-base-2: #0d1a16;
-    --bg-surface: #101f1a;
-    --bg-elevated: #16281f;
-    --bg-card: #132219;
-    --border: #22392f;
-    --border-light: #2e4c3e;
-    --accent: #18b892;
-    --accent-hover: #22d1a6;
-    --accent-soft: rgba(24, 184, 146, .13);
-    --accent-2: #e8a93f;
-    --accent-2-soft: rgba(232, 169, 63, .14);
-    --accent-2-hover: #f0bb5c;
-    --success: #4ade80;
-    --success-soft: rgba(74, 222, 128, .13);
-    --danger: #f2564b;
-    --danger-soft: rgba(242, 86, 75, .13);
-    --warning: #f5a623;
-    --warning-soft: rgba(245, 166, 35, .13);
-    --info: #4fa3e3;
-    --info-soft: rgba(79, 163, 227, .13);
-    --text-primary: #f2f1e8;
-    --text-secondary: #a3b6ab;
-    --text-muted: #6c8177;
+[data-theme="light"] {
+    --bg-base: #f4f7f8;
+    --bg-base-2: #eef3f4;
+    --bg-surface: #ffffff;
+    --bg-elevated: #eef3f5;
+    --bg-card: #ffffff;
+    --border: #e0e8ea;
+    --border-light: #ccd8dc;
+    --accent: #2c7a9e;
+    --accent-hover: #235f7a;
+    --accent-soft: rgba(44, 122, 158, .09);
+    --accent-2: #3d9a8c;
+    --accent-2-soft: rgba(61, 154, 140, .10);
+    --accent-2-hover: #317d71;
+    --on-accent: #ffffff;
+    --success: #2e9e6d;
+    --success-soft: rgba(46, 158, 109, .10);
+    --danger: #d6584a;
+    --danger-soft: rgba(214, 88, 74, .10);
+    --warning: #c98826;
+    --warning-soft: rgba(201, 136, 38, .10);
+    --info: #3b82c4;
+    --info-soft: rgba(59, 130, 196, .10);
+    --text-primary: #1e2b33;
+    --text-secondary: #5b6b73;
+    --text-muted: #94a3aa;
     --sidebar-w: 264px;
     --topbar-h: 66px;
     --radius: 16px;
     --radius-sm: 10px;
     --radius-lg: 22px;
-    --shadow: 0 16px 40px -12px rgba(0, 0, 0, .55), 0 4px 14px rgba(0, 0, 0, .3);
-    --shadow-sm: 0 6px 18px -6px rgba(0, 0, 0, .4);
-    --shadow-accent: 0 8px 22px -8px rgba(24, 184, 146, .45);
+    --shadow: 0 16px 40px -16px rgba(30, 50, 60, .14), 0 4px 14px rgba(30, 50, 60, .05);
+    --shadow-sm: 0 6px 18px -10px rgba(30, 50, 60, .10);
+    --shadow-accent: 0 8px 22px -10px rgba(44, 122, 158, .3);
     --transition: .2s cubic-bezier(.4, 0, .2, 1);
 }
 
-[data-theme="light"] {
-    --bg-base: #f8f6ee;
-    --bg-base-2: #f2efe2;
-    --bg-surface: #ffffff;
-    --bg-elevated: #f4f1e6;
-    --bg-card: #ffffff;
-    --border: #e6e0cf;
-    --border-light: #d7cfb6;
-    --accent: #0e8c74;
-    --accent-hover: #0b735f;
-    --accent-soft: rgba(14, 140, 116, .10);
-    --accent-2: #c9821e;
-    --accent-2-soft: rgba(201, 130, 30, .10);
-    --accent-2-hover: #a86b16;
-    --success: #1e9e5a;
-    --success-soft: rgba(30, 158, 90, .10);
-    --danger: #d9463b;
-    --danger-soft: rgba(217, 70, 59, .10);
-    --warning: #c9740f;
-    --warning-soft: rgba(201, 116, 15, .10);
-    --info: #2472b8;
-    --info-soft: rgba(36, 114, 184, .10);
-    --text-primary: #16231d;
-    --text-secondary: #5c6b60;
-    --text-muted: #96a196;
+[data-theme="dark"] {
+    --bg-base: #16232b;
+    --bg-base-2: #182933;
+    --bg-surface: #1c2c35;
+    --bg-elevated: #24363f;
+    --bg-card: #1f313a;
+    --border: #30454f;
+    --border-light: #3d5560;
+    --accent: #4fb6da;
+    --accent-hover: #6bc8e8;
+    --accent-soft: rgba(79, 182, 218, .15);
+    --accent-2: #5fcbb8;
+    --accent-2-soft: rgba(95, 203, 184, .15);
+    --accent-2-hover: #7ad9c8;
+    --on-accent: #0c222a;
+    --success: #4ade94;
+    --success-soft: rgba(74, 222, 148, .15);
+    --danger: #f2796b;
+    --danger-soft: rgba(242, 121, 107, .15);
+    --warning: #f0b15a;
+    --warning-soft: rgba(240, 177, 90, .15);
+    --info: #6fb6e8;
+    --info-soft: rgba(111, 182, 232, .15);
+    --text-primary: #eaf1f4;
+    --text-secondary: #a9bac2;
+    --text-muted: #728691;
     --sidebar-w: 264px;
     --topbar-h: 66px;
     --radius: 16px;
     --radius-sm: 10px;
     --radius-lg: 22px;
-    --shadow: 0 16px 40px -14px rgba(30, 40, 30, .16), 0 4px 14px rgba(30, 40, 30, .06);
-    --shadow-sm: 0 6px 18px -8px rgba(30, 40, 30, .12);
-    --shadow-accent: 0 8px 22px -10px rgba(14, 140, 116, .3);
+    --shadow: 0 16px 40px -14px rgba(6, 14, 20, .5), 0 4px 14px rgba(6, 14, 20, .3);
+    --shadow-sm: 0 6px 18px -8px rgba(6, 14, 20, .35);
+    --shadow-accent: 0 8px 22px -10px rgba(79, 182, 218, .4);
     --transition: .2s cubic-bezier(.4, 0, .2, 1);
 }
 
@@ -239,8 +241,8 @@ html {
 body {
     font-family: 'Cairo', sans-serif;
     background:
-        radial-gradient(1100px 600px at 100% -10%, var(--accent-soft), transparent 60%),
-        radial-gradient(900px 500px at -10% 110%, var(--accent-2-soft), transparent 55%),
+        radial-gradient(1200px 600px at 100% -10%, var(--accent-soft), transparent 55%),
+        radial-gradient(900px 500px at -10% 110%, var(--accent-2-soft), transparent 50%),
         var(--bg-base);
     background-attachment: fixed;
     color: var(--text-primary);
@@ -271,7 +273,7 @@ ul {
 
 ::selection {
     background: var(--accent);
-    color: #06251e;
+    color: var(--on-accent);
 }
 
 :focus-visible {
@@ -341,7 +343,7 @@ ul {
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    color: #06251e;
+    color: var(--on-accent);
     flex-shrink: 0;
     box-shadow: var(--shadow-accent);
 }
@@ -519,7 +521,7 @@ ul {
 
 .todo-btn-confirm {
     background: var(--accent);
-    color: #06251e;
+    color: var(--on-accent);
 }
 
 .todo-btn-cancel {
@@ -597,7 +599,7 @@ ul {
     font-weight: 900;
     position: absolute;
     font-size: 9px;
-    color: #06251e;
+    color: var(--on-accent);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -1296,7 +1298,7 @@ ul {
 
 .btn-primary {
     background: var(--accent);
-    color: #06251e;
+    color: var(--on-accent);
 }
 
 .btn-primary:hover {
@@ -1307,7 +1309,7 @@ ul {
 
 .btn-success {
     background: var(--success);
-    color: #06251e;
+    color: var(--on-accent);
 }
 
 .btn-success:hover {
@@ -1725,7 +1727,7 @@ ul {
 
 .period-btn.active {
     background: var(--accent);
-    color: #06251e;
+    color: var(--on-accent);
 }
 
 .custom-date-range {
