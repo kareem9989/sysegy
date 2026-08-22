@@ -3461,11 +3461,12 @@ function plInit() {
 
 function plAddRow() {
     plRows.push({
-        item: '',
-        netW: '',
-        grossW: '',
+        product: '',
+        flavor: '',
+        cartons: '',
+        weightG: '',
         units: '',
-        cartons: ''
+        grossW: ''
     });
     plRender();
 }
@@ -3487,11 +3488,13 @@ function plRender() {
     tbody.innerHTML = plRows.map((r,i)=>`
     <tr>
       <td>${i + 1}</td>
-      <td><input class="form-input" style="min-width:180px" value="${r.item}" placeholder="اسم المنتج" oninput="plUpdate(${i},'item',this.value)"></td>
-      <td><input class="form-input" style="width:100px" type="number" step="0.001" value="${r.netW}" placeholder="0.000" oninput="plUpdate(${i},'netW',this.value)"></td>
+      <td><input class="form-input" style="min-width:150px" value="${r.product}" placeholder="اسم المنتج" oninput="plUpdate(${i},'product',this.value)"></td>
+      <td><input class="form-input" style="min-width:130px" value="${r.flavor}" placeholder="النكهة" oninput="plUpdate(${i},'flavor',this.value)"></td>
+      <td><input class="form-input" style="width:90px" type="number" value="${r.cartons}" placeholder="0" oninput="plUpdate(${i},'cartons',this.value)"></td>
+      <td><input class="form-input" style="width:90px" type="number" step="1" value="${r.weightG}" placeholder="50-60" oninput="plUpdate(${i},'weightG',this.value)"></td>
+      <td><input class="form-input" style="width:80px" type="number" value="${r.units}" placeholder="15" oninput="plUpdate(${i},'units',this.value)"></td>
+      <td style="font-weight:600;color:var(--success)">${plNetPerCarton(r)}</td>
       <td><input class="form-input" style="width:100px" type="number" step="0.001" value="${r.grossW}" placeholder="0.000" oninput="plUpdate(${i},'grossW',this.value)"></td>
-      <td><input class="form-input" style="width:80px" type="number" value="${r.units}" placeholder="0" oninput="plUpdate(${i},'units',this.value)"></td>
-      <td><input class="form-input" style="width:100px" type="number" value="${r.cartons}" placeholder="0" oninput="plUpdate(${i},'cartons',this.value)"></td>
       <td style="font-weight:600;color:var(--success)">${plCalcRow(r, 'net')}</td>
       <td style="font-weight:600;color:var(--info)">${plCalcRow(r, 'gross')}</td>
       <td><button class="btn-icon del" onclick="plRemoveRow(${i})"><i class="fas fa-trash"></i></button></td>
@@ -3499,12 +3502,21 @@ function plRender() {
     plCalcTotals();
 }
 
+// Net weight per carton (kg) = weight per unit (g) × units per carton ÷ 1000
+function plNetPerCarton(r) {
+    const g = parseFloat(r.weightG) || 0;
+    const u = parseFloat(r.units) || 0;
+    if (!g || !u)
+        return '—';
+    return (g * u / 1000).toFixed(3);
+}
+
 function plCalcRow(r, type) {
     const cartons = parseFloat(r.cartons) || 0;
     if (!cartons)
         return '—';
     if (type === 'net') {
-        const net = parseFloat(r.netW) || 0;
+        const net = parseFloat(plNetPerCarton(r)) || 0;
         return net ? (net * cartons).toFixed(3) + ' kg' : '—';
     } else {
         const gross = parseFloat(r.grossW) || 0;
@@ -3518,7 +3530,7 @@ function plCalcTotals() {
       , totalGross = 0;
     plRows.forEach(r=>{
         const c = parseFloat(r.cartons) || 0;
-        const n = parseFloat(r.netW) || 0;
+        const n = parseFloat(plNetPerCarton(r)) || 0;
         const g = parseFloat(r.grossW) || 0;
         totalCartons += c;
         totalNet += n * c;
@@ -3553,19 +3565,21 @@ function plPrint() {
       , totalGross = 0;
     const rows = plRows.map((r)=>{
         const c = parseFloat(r.cartons) || 0;
-        const n = parseFloat(r.netW) || 0;
+        const n = parseFloat(plNetPerCarton(r)) || 0;
         const g = parseFloat(r.grossW) || 0;
+        const itemLabel = [r.product, r.flavor].filter(Boolean).join(' - ');
         totalCartons += c;
         totalNet += n * c;
         totalGross += g * c;
         return `<tr>
-      <td>${r.item || ''}</td>
+      <td>${itemLabel}</td>
+      <td>${c || ''}</td>
+      <td>${r.weightG || ''}</td>
+      <td>${r.units || ''}</td>
       <td>${n ? n.toFixed(3) : ''}</td>
       <td>${n && c ? (n * c).toFixed(2) : ''}</td>
       <td>${g ? g.toFixed(3) : ''}</td>
       <td>${g && c ? (g * c).toFixed(2) : ''}</td>
-      <td>${r.units || ''}</td>
-      <td>${c || ''}</td>
     </tr>`;
     }
     ).join('');
@@ -3665,25 +3679,27 @@ function plPrint() {
   <table class="main-table">
     <thead>
       <tr>
-        <th>Item</th>
+        <th>Product / Flavor</th>
+        <th>carton<br>number</th>
+        <th>Weight (g)<br>per unit</th>
+        <th>Units<br>per carton</th>
         <th>Net weight<br>carton</th>
         <th>Total Net<br>weight</th>
         <th>Gross<br>Weight</th>
         <th>Total Gross<br>Weight</th>
-        <th>Number of<br>units</th>
-        <th>carton<br>number</th>
       </tr>
     </thead>
     <tbody>${rows}</tbody>
     <tfoot>
       <tr class="total-row">
         <td>Total</td>
+        <td>${totalCartons.toLocaleString()}</td>
+        <td></td>
+        <td></td>
         <td></td>
         <td>${totalNet.toFixed(2)}</td>
         <td></td>
         <td>${totalGross.toFixed(2)}</td>
-        <td></td>
-        <td>${totalCartons.toLocaleString()}</td>
       </tr>
     </tfoot>
   </table>
