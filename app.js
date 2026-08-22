@@ -2950,10 +2950,10 @@ async function printProductionOrder(id) {
             return `<tr>
         <td style="text-align:center;font-weight:700">${i + 1}</td>
         <td style="font-weight:700;font-size:11pt">${item.ProductName}</td>
+        <td>${flavorsHtml}</td>
         <td style="text-align:center;font-size:12pt;font-weight:900">${item.CartonQty || item.Quantity}</td>
         <td>${item.PackSize || '—'}</td>
         <td>${item.UnitsPerCarton || '—'}</td>
-        <td>${flavorsHtml}</td>
         <td style="text-align:center;font-size:16pt">☐</td>
       </tr>`;
         }
@@ -3029,8 +3029,8 @@ async function printProductionOrder(id) {
       </div>
       <table>
         <thead><tr>
-          <th>#</th><th>Product / المنتج</th><th>Cartons / كرتون</th>
-          <th>Pack Size</th><th>Units/Carton</th><th>Flavors / النكهات</th><th>✓</th>
+          <th>#</th><th>Product / المنتج</th><th>Flavors / النكهات</th><th>Cartons / كرتون</th>
+          <th>Pack Size</th><th>Units/Carton</th><th>✓</th>
         </tr></thead>
         <tbody>${rows}</tbody>
       </table>
